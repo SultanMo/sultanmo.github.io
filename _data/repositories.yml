@@ -1,12 +1,10 @@
 github_users:
-  - torvalds
-  - alshedivat
+  - sultanmo
 
 github_repos:
-  - alshedivat/al-folio
-  - twbs/bootstrap
-  - jekyll/jekyll
-  - jquery/jquery
-  - FortAwesome/Font-Awesome
-  - jpswalsh/academicons
-  - mathjax/MathJax
+  - sultanmo/ml-compimaging
+  - sultanmo/fMRI-cognitive-states-classification
+  - sultanmo/cyoa-engine-cpp
+  - sultanmo/tello_SP
+  - sultanmo/stocks_scraper
+  - sultanmo/pic24-project
