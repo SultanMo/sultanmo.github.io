@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://sultanmo.github.io/sitemap.xml
