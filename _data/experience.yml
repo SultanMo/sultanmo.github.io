@@ -1,0 +1,22 @@
+# "Experience" on the home page, oldest first: one stop per column on a straight line.
+# kind: past (default) or now (where you are).
+- when: "2018"
+  where: KAUST
+  what: Research intern
+
+- when: 2019 – 2021
+  where: Thakaa
+  what: Software engineer, R&D
+
+- when: 2021 – 2022
+  where: National Center for AI
+  what: Research engineer
+
+- when: 2022 – 2024
+  where: Duke University
+  what: MS, ECE
+
+- when: 2024 – now
+  where: Carnegie Mellon
+  what: PhD, ECE
+  kind: now

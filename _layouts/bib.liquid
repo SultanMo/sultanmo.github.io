@@ -1,0 +1,117 @@
+---
+---
+{%- comment -%}
+  Local override of al_folio_core's bib layout. Each paper is one row of the page grid:
+  the left margin holds the venue (and any award) above a thumbnail of the paper's figure; the right
+  column holds the title (linked to the project page), authors, any short note, and a line of links.
+  The Abstract and BibTeX toggles keep al-folio's classes (a.abstract / a.bibtex inside .links, panels
+  .abstract.hidden / .bibtex.hidden beside it), so al-folio's own script still opens and closes them.
+  BibTeX fields read here: title, author, year, venue_short, abbr, award_name, preview, website, pdf,
+  doi, arxiv, code, poster, slides, video, note, abstract, bibtex_show, figure_alt.
+  (`summary` stays in papers.bib but is not shown: entries carry no description.)
+  After a gem update, check for drift with: bundle exec al-folio upgrade overrides audit
+{%- endcomment -%}
+{%- capture venue -%}{{ entry.venue_short | default: entry.abbr }}{%- endcapture -%}
+{%- if venue == '' -%}
+  {%- capture venue -%}{{ entry.journal | default: entry.booktitle }} {{ entry.year }}{%- endcapture -%}
+{%- endif -%}
+<div class="pub">
+  <div class="pub-rail">
+    <p class="pub-venue">{{ venue }}</p>
+    {%- if entry.award_name -%}
+      <p class="pub-award">{{ entry.award_name }}</p>
+    {%- endif -%}
+    {%- if entry.preview -%}
+      {%- if entry.preview contains '://' -%}
+        {%- assign preview_src = entry.preview -%}
+      {%- else -%}
+        {%- assign preview_src = entry.preview | prepend: '/assets/img/publication_preview/' | relative_url -%}
+      {%- endif -%}
+      <figure class="pub-figure">
+        {%- if entry.website -%}<a href="{{ entry.website }}" tabindex="-1">{%- endif -%}
+        <img src="{{ preview_src }}" alt="{{ entry.figure_alt | escape }}" loading="lazy">
+        {%- if entry.website -%}</a>{%- endif -%}
+      </figure>
+    {%- endif -%}
+  </div>
+
+  <div class="pub-body">
+    <h3 class="pub-title">
+      {%- if entry.website -%}
+        <a href="{{ entry.website }}">{{ entry.title }}</a>
+      {%- else -%}
+        {{ entry.title }}
+      {%- endif -%}
+    </h3>
+
+    <p class="pub-authors">
+      {%- for author in entry.author_array -%}
+        {%- assign author_last_name = author.last | regex_replace: '[*∗†‡§¶‖&^]', '' -%}
+        {%- assign author_is_self = false -%}
+        {%- if site.scholar.last_name contains author_last_name and site.scholar.first_name contains author.first -%}
+          {%- assign author_is_self = true -%}
+        {%- endif -%}
+        {%- assign coauthor_url = nil -%}
+        {%- assign clean_last_name = author_last_name | downcase | remove_accents -%}
+        {%- if site.data.coauthors[clean_last_name] -%}
+          {%- for coauthor in site.data.coauthors[clean_last_name] -%}
+            {%- if coauthor.firstname contains author.first -%}
+              {%- assign coauthor_url = coauthor.url -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+        {%- capture author_name -%}{{ author.first }} {{ author.last }}{%- endcapture -%}
+        {%- if author_is_self -%}
+          <span class="me">{{ author_name }}</span>
+        {%- elsif coauthor_url -%}
+          <a href="{{ coauthor_url }}">{{ author_name }}</a>
+        {%- else -%}
+          {{ author_name }}
+        {%- endif -%}
+        {%- unless forloop.last -%},{{ ' ' }}{%- endunless -%}
+      {%- endfor -%}
+    </p>
+
+    {%- if entry.note -%}
+      <p class="pub-note">{{ entry.note }}</p>
+    {%- endif -%}
+
+    {%- capture links -%}
+      {%- if entry.pdf -%}
+        <a href="{% if entry.pdf contains '://' %}{{ entry.pdf }}{% else %}{{ entry.pdf | prepend: '/assets/pdf/' | relative_url }}{% endif %}">Paper</a>|
+      {%- elsif entry.doi -%}
+        <a href="https://doi.org/{{ entry.doi }}">Paper</a>|
+      {%- endif -%}
+      {%- if entry.arxiv -%}<a href="https://arxiv.org/abs/{{ entry.arxiv }}">arXiv</a>|{%- endif -%}
+      {%- if entry.code -%}<a href="{{ entry.code }}">Code</a>|{%- endif -%}
+      {%- if entry.website -%}<a href="{{ entry.website }}">Project page</a>|{%- endif -%}
+      {%- if entry.poster -%}
+        <a href="{% if entry.poster contains '://' %}{{ entry.poster }}{% else %}{{ entry.poster | prepend: '/assets/pdf/' | relative_url }}{% endif %}">Poster</a>|
+      {%- endif -%}
+      {%- if entry.slides -%}
+        <a href="{% if entry.slides contains '://' %}{{ entry.slides }}{% else %}{{ entry.slides | prepend: '/assets/pdf/' | relative_url }}{% endif %}">Slides</a>|
+      {%- endif -%}
+      {%- if entry.video -%}<a href="{{ entry.video }}">Video</a>|{%- endif -%}
+      {%- if entry.abstract -%}<a class="abstract" href="#" role="button">Abstract</a>|{%- endif -%}
+      {%- if entry.bibtex_show -%}<a class="bibtex" href="#" role="button">BibTeX</a>|{%- endif -%}
+    {%- endcapture -%}
+    {%- assign links = links | strip | split: '|' -%}
+    {%- if links.size > 0 -%}
+      <p class="links">{{ links | join: '<span class="sep" aria-hidden="true">·</span> ' }}</p>
+    {%- endif -%}
+
+    {%- if entry.abstract -%}
+      <div class="abstract hidden">
+        <p>{{ entry.abstract }}</p>
+      </div>
+    {%- endif -%}
+    {%- if entry.bibtex_show -%}
+      <div class="bibtex hidden">
+        {% highlight bibtex %}
+        {{- entry.bibtex | hideCustomBibtex -}}
+      {% endhighlight %}
+      </div>
+    {%- endif -%}
+  </div>
+</div>

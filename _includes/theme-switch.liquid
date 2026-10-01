@@ -1,0 +1,30 @@
+{%- comment -%}
+  Makes al-folio's light/dark button in the top bar a plain two-way switch.
+  al-folio's theme.js cycles system → light → dark; here one click always shows the other theme.
+  toggleThemeSetting and setThemeSetting are top-level bindings from theme.js (loaded in <head>);
+  its click handler calls toggleThemeSetting() by name, so reassigning it changes what a click does.
+  The choice is stored as al-folio stores it (localStorage "theme"), so it holds on every page.
+  Included at the end of the home page (_layouts/about.liquid) and the Research page.
+{%- endcomment -%}
+<script>
+  (function () {
+    var button = document.getElementById("light-toggle");
+    if (!button || typeof setThemeSetting !== "function") return;
+    var isDark = function () {
+      return document.documentElement.getAttribute("data-theme") === "dark";
+    };
+    var label = function () {
+      var text = isDark() ? "Switch to light mode" : "Switch to dark mode";
+      button.setAttribute("aria-label", text);
+      button.title = text;
+    };
+    toggleThemeSetting = function () {
+      setThemeSetting(isDark() ? "light" : "dark");
+    };
+    button.addEventListener("click", function () {
+      setTimeout(label, 0);
+    });
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", label);
+    label();
+  })();
+</script>

@@ -1,0 +1,7 @@
+{%- comment -%}
+  An inline SVG icon from _data/icons.yml (Font Awesome Free, CC BY 4.0). Usage: {% include icon.liquid name="github" %}
+{%- endcomment -%}
+{%- assign icon = site.data.icons[include.name] -%}
+{%- if icon -%}
+  <svg class="sa-icon" viewBox="{{ icon.viewbox }}" aria-hidden="true" focusable="false"><path fill="currentColor" d="{{ icon.path }}"/></svg>
+{%- endif -%}

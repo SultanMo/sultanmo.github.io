@@ -1,0 +1,21 @@
+# "Projects" on the Research tab, newest first. Each row looks like a paper row.
+- label: Duke · 2023
+  title: Privacy-Optimized Camera
+  authors: Sultan Alshehri
+  url: https://sultanmo.github.io/ml-compimaging/
+  figure: privacy-pipeline.webp # in assets/img/publication_preview/
+  figure_alt: >-
+    Pipeline: a trainable optical filter and a digital encoder are optimized together, so the task model
+    still works while an adversary can neither reconstruct nor identify the person in the image.
+  # text is kept for reference but not shown (entries carry no description)
+  text: >-
+    A trainable optical filter and a digital encoder, optimized jointly for privacy and utility, so that
+    images keep the information a vision task needs without exposing private detail. Evaluated on image
+    classification and semantic segmentation.
+  links:
+    - name: Report
+      url: https://sultanmo.github.io/ml-compimaging/project_paper.pdf
+    - name: Code
+      url: https://github.com/sultanmo/ml-compimaging
+    - name: Project page
+      url: https://sultanmo.github.io/ml-compimaging/

@@ -1,0 +1,52 @@
+---
+layout: page
+permalink: /research/
+title: Research
+description:
+nav: true
+nav_order: 2
+---
+<div class="sa-research">
+<div class="publications">{% bibliography %}</div>
+
+{%- if site.data.projects -%}
+<section aria-labelledby="projects">
+  <h2 class="sa-h" id="projects">Projects</h2>
+  <div class="publications">
+    <ol class="bibliography">
+      {%- for project in site.data.projects -%}
+        <li>
+          <div class="pub">
+            <div class="pub-rail">
+              <p class="pub-venue">{{ project.label }}</p>
+              {%- if project.figure -%}
+                <figure class="pub-figure">
+                  <a href="{{ project.url }}" tabindex="-1">
+                    <img src="{{ project.figure | prepend: '/assets/img/publication_preview/' | relative_url }}" alt="{{ project.figure_alt | escape }}" loading="lazy">
+                  </a>
+                </figure>
+              {%- endif -%}
+            </div>
+            <div class="pub-body">
+              <h3 class="pub-title"><a href="{{ project.url }}">{{ project.title }}</a></h3>
+              {%- if project.authors -%}
+                <p class="pub-authors"><span class="me">{{ project.authors }}</span></p>
+              {%- endif -%}
+              {%- if project.links -%}
+                {%- capture project_links -%}
+                  {%- for link in project.links -%}<a href="{{ link.url }}">{{ link.name }}</a>|{%- endfor -%}
+                {%- endcapture -%}
+                {%- assign project_links = project_links | strip | split: '|' -%}
+                <p class="links">{{ project_links | join: '<span class="sep" aria-hidden="true">·</span> ' }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ol>
+  </div>
+</section>
+{%- endif -%}
+</div>
+
+{% include theme-switch.liquid %}

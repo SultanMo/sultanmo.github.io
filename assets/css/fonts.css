@@ -1,0 +1,8 @@
+/* Self-hosted IBM Plex (SIL Open Font License, see assets/fonts/OFL.txt), loaded through
+   `third_party_libraries.google_fonts` in _config.yml so that no request leaves the site.
+   Plex Serif for names and titles, Plex Sans (one variable file) for text, Plex Mono for labels. */
+@font-face { font-family: "Plex Serif"; src: url("/assets/fonts/plexserif-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Plex Serif"; src: url("/assets/fonts/plexserif-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Plex Sans"; src: url("/assets/fonts/plexsans-var.woff2") format("woff2"); font-weight: 100 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Plex Mono"; src: url("/assets/fonts/plexmono-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Plex Mono"; src: url("/assets/fonts/plexmono-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }

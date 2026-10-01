@@ -1,23 +1,24 @@
 ---
 layout: about
-title: about
+title: About
 permalink: /
-subtitle: <a href='https://duke.edu'>Duke University</a> • <a href="https://ece.duke.edu">Electrical and Computer Engineering Department</a>
-
+role: PhD Student, Electrical & Computer Engineering
+affiliation: Carnegie Mellon University
 
 profile:
-  align: right
-  image: IMG.jpg
-  image_circular: false # crops the image to make it circular
-  address: >
-    <p></p>
+  image: prof_pic.jpg # in assets/img/ (square); leave empty to show the monogram
+  monogram: SA
 
-news: false  # includes a list of news items
-latest_posts: false  # includes a list of the newest posts
-selected_papers: false # includes a list of papers marked as "selected={true}"
-social: true  # includes social icons at the bottom of the page
+# Sections under the bio. The home page shows the bio only; the papers live on the Research tab
+# (_pages/research.html). Each switch below adds a section back here; the content stays in its file.
+experience: true # the Experience line under the bio, from _data/experience.yml
+research: false # papers marked selected={true} in _bibliography/papers.bib
+earlier: false # papers marked section={earlier}
+service: false # rows from _data/service.yml
+announcements:
+  enabled: false # news, one file per item in _news/
+  limit: 5
 ---
 
-I am a Research Master's student in the Electrical and Computer Engineering Department at Duke University, specializing in machine learning. My academic focus revolves around the privacy and reliability of AI.
 
-Previously, I worked as a research engineer at the NCAI Center, where I was involved in building ML systems for various applications. I also interned at the EMAN Group at KAUST, working on enhancing biomedical signal classification. I obtained my B.Sc. from King Saud University, majoring in Electrical Engineering.
+I am a PhD student in Electrical and Computer Engineering at Carnegie Mellon University, advised by Prof. [Marios Savvides](https://www.ece.cmu.edu/directory/bios/savvides-marios.html). My research studies reasoning and multimodal understanding in large language and vision‑language models, with a focus on compositionality, uncertainty, and generalization.

@@ -1,16 +1,52 @@
 ---
 ---
 
-@string{aps = {American Physical Society,}}
+@inproceedings{alshehri2026similarity,
+  title       = {Similarity Is Not Logic: Factored Inference for Dual-Encoder Vision-Language Models},
+  author      = {Alshehri, Sultan and Yang, Zhantao and Zhang, Han and Savvides, Marios},
+  booktitle   = {International Conference on Machine Learning (ICML)},
+  year        = {2026},
+  abbr        = {ICML},
+  venue_short = {ICML 2026},
+  selected    = {true},
+  preview     = {lcse-diagram.webp},
+  figure_alt  = {LCSE pipeline: an LLM parser splits the prompt into concepts, frozen text and image encoders score each concept, and LCSE combines the scores with the logical operator.},
+  summary     = {CLIP-style models ignore logical operators: a query for “umbrella and no person” retrieves images with both. Executing the constraint outside the similarity score, with no training, raises logical-operator accuracy on CLIP by 27 points and leaves ordinary retrieval intact.},
+  abstract    = {Dual-encoder vision–language models (VLMs) expose a similarity interface that enables zero-shot retrieval but fails compositional constraints: queries like “umbrella and no person” retrieve images containing both, even when concept detection is reliable. We trace this to an interface-level Bag-of-Concepts effect, where similarity scores approximate mean pooling of concept evidence regardless of operators; although operator-dependent signals exist in text embeddings, they are too weak or misaligned to affect rankings. Fine-tuning does not reliably resolve this failure because the dominant bottleneck is how similarity aggregates evidence rather than what encoders represent. We propose factored inference, which separates evidence extraction from constraint execution, and introduce LCSE (Logic-Constrained Score Editing), a training-free method that executes constraints externally using concept scores from frozen encoders. We also introduce FACTOR-Bench, where LCSE achieves 85.5% accuracy versus 73.2% for the best fine-tuned baseline, 90.7% when applied to SigLIP 2, and improves NegBench COCO MCQ accuracy from 27.2% to 65.2% while preserving retrieval performance.},
+  pdf         = {https://sultanmo.github.io/factored-vlm/static/pdfs/paper.pdf},
+  code        = {https://github.com/SultanMo/factored-vlm},
+  poster      = {https://sultanmo.github.io/factored-vlm/static/pdfs/poster.pdf},
+  website     = {https://sultanmo.github.io/factored-vlm/},
+  bibtex_show = {true}
+}
 
+@inproceedings{alshehri2026rejected,
+  title       = {Rejected When Asked, Followed When Assumed: False Presuppositions in Medical Vision-Language Models},
+  author      = {Alshehri, Sultan and Khan, Almaan and Alharbi, Sarah and Savvides, Marios},
+  booktitle   = {Med-Reasoner Workshop at NeurIPS},
+  year        = {2026},
+  abbr        = {NeurIPS Workshop},
+  venue_short = {NeurIPS 2026 Med‑Reasoner Workshop},
+  selected    = {true},
+  preview     = {med-presupposition-design.webp},
+  figure_alt  = {Study design: for the same image and finding, a direct check, a presupposing question, and a matched control where the finding is present.},
+  summary     = {Medical vision-language models reject a false premise when asked about it directly, yet follow the same premise when a question assumes it.},
+  note        = {Paper forthcoming}
+}
 
-@ARTICLE{9131706,
-  author={Albalawi, Fahad and Alshehri, Sultan and Chahid, Abderrazak and Laleg-Kirati, Taous-Meriem},
-  journal={IEEE Access}, 
-  title={Voxel Weight Matrix-Based Feature Extraction for Biomedical Applications}, 
-  year={2020},
-  volume={8},
-  number={},
-  pages={121451-121459},
-  preview={paper_preview.png},
-  doi={10.1109/ACCESS.2020.3006521}}
+@article{albalawi2020voxel,
+  title       = {Voxel Weight Matrix-Based Feature Extraction for Biomedical Applications},
+  author      = {Albalawi, Fahad and Alshehri, Sultan and Chahid, Abderrazak and Laleg-Kirati, Taous-Meriem},
+  journal     = {IEEE Access},
+  volume      = {8},
+  pages       = {121451--121459},
+  year        = {2020},
+  doi         = {10.1109/ACCESS.2020.3006521},
+  abbr        = {IEEE Access},
+  venue_short = {IEEE Access 2020},
+  section     = {earlier},
+  preview     = {vwm-framework.webp},
+  figure_alt  = {Framework: fMRI voxel signals are concatenated, quantized, turned into voxel-weight-matrix features, and classified.},
+  summary     = {From a summer internship at KAUST.},
+  bibtex_show = {true}
+}

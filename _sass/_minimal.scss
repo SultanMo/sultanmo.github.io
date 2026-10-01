@@ -1,0 +1,848 @@
+/*******************************************************************************
+ * Site look (local addition, loaded last from assets/css/main.scss)
+ *
+ * A white page on one grid: a left margin for the portrait, venue labels and figures,
+ * and a right column for everything you read. One type family, three voices:
+ * IBM Plex Serif for names and titles, Plex Sans for text and links, Plex Mono for labels.
+ * Carnegie red for links, labels, the bar beside the bio and a thin rule across the top.
+ ******************************************************************************/
+
+:root {
+  --paper: #fff;
+  --ink: #161616;
+  --text: #393939;
+  --muted: #6b6b6b;
+  --faint: #8d8d8d;
+  --accent: #a3182c;
+  --accent-deep: #7c1220;
+  --accent-soft: rgba(163, 24, 44, 0.55);
+  --rule: #8c1b26;
+  --line: #e5e4e2;
+  --hover: rgba(0, 0, 0, 0.035);
+  --box: #f5f4f2;
+  --img: none;
+  --serif: "Plex Serif", "IBM Plex Serif", Georgia, serif;
+  --sans: "Plex Sans", "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --mono: "Plex Mono", "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --rail: 10.5rem;
+  --gap: 2.25rem;
+  --measure: 50rem;
+  --radius: 12px;
+
+  // al-folio's own tokens, pointed at the palette above
+  --global-bg-color: var(--paper);
+  --global-text-color: var(--text);
+  --global-text-color-light: var(--muted);
+  --global-theme-color: var(--accent);
+  --global-hover-color: var(--accent);
+  --global-divider-color: var(--line);
+  --global-card-bg-color: var(--paper);
+  --global-highlight-color: var(--accent);
+  --global-code-bg-color: var(--box);
+}
+
+html[data-theme="dark"] {
+  --paper: #121314;
+  --ink: #f2f3f4;
+  --text: #d2d5d9;
+  --muted: #9ba0a7;
+  --faint: #7e848c;
+  --accent: #f0838d;
+  --accent-deep: #f7b0b6;
+  --accent-soft: rgba(240, 131, 141, 0.45);
+  --rule: #a3182c;
+  --line: #2a2d31;
+  --hover: rgba(255, 255, 255, 0.045);
+  --box: #1b1d20;
+  --img: brightness(0.9);
+
+  --global-bg-color: var(--paper);
+  --global-text-color: var(--text);
+  --global-text-color-light: var(--muted);
+  --global-theme-color: var(--accent);
+  --global-hover-color: var(--accent);
+  --global-divider-color: var(--line);
+  --global-card-bg-color: var(--paper);
+  --global-highlight-color: var(--accent);
+  --global-code-bg-color: var(--box);
+}
+
+/* ── Page ──────────────────────────────────────────────────────────── */
+/* Background: white. Behind the header only, a faint grey dot grid (engineering paper) that fades
+   out further down; dark mode adds one soft wash of Carnegie red under the name. */
+html {
+  background-color: var(--paper);
+}
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 46rem;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle at 1px 1px, rgba(22, 22, 22, 0.075) 1px, transparent 1.5px) 0 0 / 22px 22px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 35%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 35%, transparent 100%);
+}
+html[data-theme="dark"] body::before {
+  background:
+    radial-gradient(ellipse 55% 60% at 30% 0%, rgba(240, 131, 141, 0.09), rgba(240, 131, 141, 0) 70%),
+    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.07) 1px, transparent 1.5px) 0 0 / 22px 22px;
+}
+body {
+  background: transparent;
+  color: var(--text);
+  font: 400 1rem/1.68 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+::selection {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+p {
+  text-wrap: pretty;
+}
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+a:hover {
+  color: var(--accent-deep);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+.container {
+  max-width: var(--measure) !important;
+  padding-left: 1.75rem !important;
+  padding-right: 1.75rem !important;
+}
+.sa-row,
+.pub {
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr);
+  column-gap: var(--gap);
+  align-items: start;
+}
+.sa-label {
+  margin: 0;
+  font: 500 0.7rem/1.9 var(--mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── Top bar (every page): About · Research and the light/dark switch ── */
+#navbar.navbar {
+  background: color-mix(in srgb, var(--paper) 70%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(12px);
+  backdrop-filter: saturate(1.4) blur(12px);
+  border-top: 3px solid var(--rule);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  opacity: 1;
+}
+#navbar .navbar-brand {
+  --global-text-color: var(--ink);
+  color: var(--ink);
+  font: 700 1.05rem/1 var(--serif);
+  text-decoration: none;
+}
+#navbar .navbar-brand .font-weight-bold {
+  font-weight: 700;
+}
+#navbar.navbar-light .navbar-nav .nav-item .nav-link {
+  color: var(--muted);
+  font: 500 0.93rem/1 var(--sans);
+  letter-spacing: 0;
+  text-transform: none;
+  text-decoration: none;
+}
+#navbar.navbar-light .navbar-nav .nav-item .nav-link:hover {
+  color: var(--ink);
+}
+#navbar.navbar-light .navbar-nav .nav-item.active > .nav-link {
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.55em;
+}
+#navbar .navbar-toggler .icon-bar {
+  background-color: var(--ink);
+}
+/* the switch: a moon in light mode, a sun in dark mode (made two-way by _includes/theme-switch.liquid) */
+#navbar #light-toggle {
+  color: var(--faint);
+  background: none;
+  border: 0;
+  transition: color 0.15s;
+}
+#navbar #light-toggle:hover {
+  color: var(--ink);
+}
+#navbar #light-toggle-system,
+#navbar #light-toggle-dark,
+#navbar #light-toggle-light {
+  display: none !important;
+}
+html:not([data-theme="dark"]) #navbar #light-toggle-dark,
+html[data-theme="dark"] #navbar #light-toggle-light {
+  display: inline-block !important;
+}
+/* No icon font is loaded (al_icons is off), so the moon and sun are drawn here as masks */
+#navbar #light-toggle-dark,
+#navbar #light-toggle-light {
+  width: 1.05rem;
+  height: 1.05rem;
+  vertical-align: -0.15rem;
+  background-color: currentColor;
+  -webkit-mask: var(--glyph) center / contain no-repeat;
+  mask: var(--glyph) center / contain no-repeat;
+}
+#navbar #light-toggle-dark {
+  --glyph: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6z'/></svg>");
+}
+#navbar #light-toggle-light {
+  --glyph: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'><circle cx='12' cy='12' r='4.2'/><path d='M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.55 1.55M17.15 17.15l1.55 1.55M5.3 18.7l1.55-1.55M17.15 6.85l1.55-1.55'/></svg>");
+}
+
+/* ── A short page still ends at the bottom of the window ─────────────── */
+body:has(.sa-home) {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+body:has(.sa-home) > .container[role="main"] {
+  flex: 1 0 auto;
+}
+
+/* ── Introduction: portrait and contact links in the margin; name, role and bio in the column ── */
+.sa-intro {
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr);
+  column-gap: var(--gap);
+  align-items: start;
+  padding-top: 3rem;
+}
+.sa-photo {
+  margin: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: var(--rule);
+}
+.sa-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.sa-mark {
+  --global-text-color: #fff;
+  font: 700 2.8rem/1 var(--serif);
+  color: #fff;
+}
+.sa-contacts {
+  list-style: none;
+  margin: 1.15rem 0 0;
+  padding: 0;
+  font-size: 0.92rem;
+}
+.sa-contacts li {
+  margin: 0;
+}
+.sa-contacts a {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.22rem 0;
+  color: var(--muted);
+  text-decoration: none;
+}
+.sa-contacts a:hover {
+  color: var(--ink);
+  text-decoration: none;
+}
+.sa-contacts .sa-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: var(--accent);
+  opacity: 0.85;
+}
+/* Name, role and affiliation: the serif for the name, quiet sans for the role, and the
+   university in the small red mono capitals the site uses for labels. */
+.sa-id h1 {
+  margin: 0.1rem 0 0;
+  font: 700 2.55rem/1.08 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.sa-role {
+  --global-text-color: var(--muted);
+  margin: 0.55rem 0 0;
+  font-size: 1.02rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.sa-affil {
+  --global-text-color: var(--accent);
+  margin: 0.5rem 0 0;
+  font: 500 0.76rem/1.5 var(--mono);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.publications ol.bibliography li .links .sep {
+  --global-text-color: var(--faint);
+  margin: 0 0.12rem 0 0.42rem; /* plus the space after it, where a line may break */
+  opacity: 0.8;
+}
+
+/* ── Bio: under the name, behind a thin red bar on its left edge ── */
+.sa-bio {
+  margin-top: 1.7rem;
+  padding: 0.15rem 0 0.15rem 1.15rem;
+  border-left: 3px solid var(--accent-soft);
+  transition: border-color 0.2s;
+}
+.sa-bio:hover {
+  border-left-color: var(--accent);
+}
+.sa-bio p {
+  margin: 0 0 0.8rem;
+}
+.sa-bio p:last-child {
+  margin-bottom: 0;
+}
+.sa-seeking {
+  --global-text-color: var(--ink);
+  font-weight: 500;
+}
+.sa-seeking::before {
+  content: "→ ";
+  color: var(--accent);
+}
+
+/* ── Experience: one stop per column on a straight line, labels alternating above and below.
+   One hue throughout: the line is the soft red of the bio's bar, past stops are red rings, the
+   current stop is solid red with a halo, and the line fades out after it (still going).
+   On first view the stops and segments appear in turn (about.liquid). ── */
+.sa-path-section {
+  margin-top: 3.4rem;
+}
+.sa-route {
+  position: relative;
+}
+.sa-path {
+  --node: 12px;
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--stops), minmax(0, 1fr));
+  height: 10.5rem;
+}
+.sa-stop {
+  position: relative;
+}
+/* the segment from this stop to the next */
+.sa-stop::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--accent-soft);
+  transform-origin: left center;
+}
+.sa-stop:last-child::after {
+  width: 3.5rem;
+  background: linear-gradient(90deg, var(--accent-soft), transparent);
+}
+.sa-node {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  box-sizing: border-box;
+  width: var(--node);
+  height: var(--node);
+  margin: calc(var(--node) / -2) 0 0 calc(var(--node) / -2);
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: var(--paper);
+}
+.sa-stop.is-now .sa-node {
+  --node: 14px;
+  background: var(--accent);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.sa-tag {
+  position: absolute;
+  left: 50%;
+  width: 10rem;
+  transform: translateX(-50%);
+  text-align: center;
+  line-height: 1.35;
+}
+.sa-stop:nth-child(odd) .sa-tag {
+  bottom: calc(50% + 1.15rem);
+}
+.sa-stop:nth-child(even) .sa-tag {
+  top: calc(50% + 1.15rem);
+}
+.sa-tag span {
+  display: block;
+}
+.sa-when {
+  --global-text-color: var(--faint);
+  font: 500 0.68rem/1.6 var(--mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.sa-stop.is-now .sa-when {
+  --global-text-color: var(--accent);
+  color: var(--accent);
+}
+.sa-where {
+  --global-text-color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.sa-what {
+  --global-text-color: var(--muted);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+/* first view: each stop, its label and the segment after it arrive in turn, left to right */
+.sa-route.will-draw .sa-stop::after {
+  transform: scaleX(0);
+}
+.sa-route.will-draw .sa-node {
+  transform: scale(0.4);
+  opacity: 0;
+}
+.sa-route.will-draw .sa-tag {
+  opacity: 0;
+}
+.sa-route.will-draw.is-drawn .sa-node {
+  transform: none;
+  opacity: 1;
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1) calc(var(--i) * 0.28s),
+    opacity 0.25s ease calc(var(--i) * 0.28s);
+}
+.sa-route.will-draw.is-drawn .sa-tag {
+  opacity: 1;
+  transition: opacity 0.45s ease calc(0.1s + var(--i) * 0.28s);
+}
+.sa-route.will-draw.is-drawn .sa-stop::after {
+  transform: none;
+  transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1) calc(0.15s + var(--i) * 0.28s);
+}
+@media print {
+  .sa-route.will-draw .sa-stop::after,
+  .sa-route.will-draw .sa-node {
+    transform: none;
+    opacity: 1;
+  }
+  .sa-route.will-draw .sa-tag {
+    opacity: 1;
+  }
+}
+
+/* ── Sections ──────────────────────────────────────────────────────── */
+.sa-home section {
+  margin-top: 3.6rem;
+}
+.sa-h,
+.publications h2.bibliography {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  border: 0;
+  text-align: left;
+  font: 500 0.74rem/1 var(--mono);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.sa-h::after,
+.publications h2.bibliography::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.sa-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sa-list li {
+  margin-bottom: 0.7rem;
+}
+.sa-list p {
+  margin: 0;
+}
+
+/* ── Papers ─────────────────────────────────────────────────────────── */
+.publications {
+  margin-top: 0;
+}
+.publications ol.bibliography {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.publications ol.bibliography li {
+  margin: 0 0 0.4rem;
+}
+.pub {
+  margin: 0 -1rem;
+  padding: 1rem;
+  border-radius: var(--radius);
+  transition: background-color 0.2s;
+}
+.pub:hover {
+  background: var(--hover);
+}
+.pub-rail {
+  padding-top: 0.2rem;
+}
+.pub-venue {
+  --global-text-color: var(--accent);
+  margin: 0;
+  font: 500 0.7rem/1.6 var(--mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.pub-award {
+  --global-text-color: #fff;
+  display: inline-block;
+  margin: 0.45rem 0 0;
+  padding: 0.24rem 0.5rem 0.2rem;
+  border-radius: 4px;
+  background: var(--accent);
+  font: 500 0.66rem/1.4 var(--mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #fff;
+}
+html[data-theme="dark"] .pub-award {
+  --global-text-color: #121314;
+  color: #121314;
+}
+/* The paper's figure as a thumbnail under the venue, in a fixed 16:10 light frame so every row
+   lines up whatever the figure's shape. Figures are drawn for white paper, so the frame stays light
+   in dark mode (slightly dimmed). The Research page widens the margin to fit them. */
+.sa-research {
+  --rail: 14rem;
+}
+.sa-research section {
+  margin-top: 2.6rem;
+}
+.pub-figure {
+  margin: 0.7rem 0 0;
+}
+.pub-figure a {
+  display: block;
+}
+.pub-figure img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: contain;
+  padding: 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+html[data-theme="dark"] .pub-figure img {
+  border-color: transparent;
+  filter: brightness(0.93);
+}
+.pub-title {
+  margin: 0;
+  font: 600 1.13rem/1.35 var(--serif);
+  color: var(--ink);
+}
+.pub-title a {
+  color: inherit;
+}
+.pub-title a:hover {
+  color: inherit;
+  text-decoration-color: var(--accent);
+}
+.pub-authors {
+  margin: 0.4rem 0 0;
+  font-size: 0.93rem;
+  color: var(--muted);
+}
+.pub-authors .me {
+  color: var(--ink);
+  font-weight: 500;
+}
+.pub-authors a {
+  color: inherit;
+}
+.pub-authors a:hover {
+  color: var(--ink);
+}
+.pub-summary {
+  margin: 0.6rem 0 0;
+}
+.pub-note {
+  margin: 0.6rem 0 0;
+  font: 500 0.7rem/1.8 var(--mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.publications ol.bibliography li .links {
+  margin: 0.6rem 0 0;
+  font-size: 0.93rem;
+  font-weight: 500;
+}
+.publications ol.bibliography li .links a {
+  white-space: nowrap; /* wrap between links, never inside "Project page" */
+}
+/* Abstract and BibTeX panels (opened by al-folio's script) */
+.publications ol.bibliography li .hidden {
+  font-size: 0.9rem;
+  border: 0;
+}
+.publications ol.bibliography li .hidden.open {
+  margin-top: 0.75rem;
+}
+.publications ol.bibliography li div.abstract.hidden.open {
+  border: 0;
+  border-left: 2px solid var(--line);
+}
+.publications ol.bibliography li .hidden p {
+  margin: 0;
+  padding: 0.1rem 0 0.1rem 1rem;
+  line-height: 1.6;
+  text-align: left;
+}
+.publications ol.bibliography li .bibtex pre,
+.publications ol.bibliography li .hidden pre {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border: 0;
+  border-radius: 8px;
+  background: var(--box);
+  font: 400 0.75rem/1.6 var(--mono);
+  color: var(--ink);
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* ── Inner pages (Publications, 404) ───────────────────────────────── */
+.post-header {
+  margin: 2.8rem 0 1.6rem;
+}
+.post-header .post-title {
+  margin: 0;
+  font: 700 2.2rem/1.15 var(--serif);
+  color: var(--ink);
+}
+.post-header .post-description:empty {
+  display: none;
+}
+.publications h2.bibliography {
+  margin-top: 1.6rem;
+}
+
+/* ── Footer ────────────────────────────────────────────────────────────
+   Hidden: no footer line. (al-folio's footer always prints a copyright line,
+   so it is hidden here rather than overriding the gem's footer.) The page keeps its bottom space. */
+footer.sticky-bottom {
+  display: none !important;
+}
+.container[role="main"] {
+  padding-bottom: 4.5rem;
+}
+footer.sticky-bottom {
+  padding: 0 0 2.8rem;
+  border-top: 0;
+  font: 400 0.7rem/1.8 var(--mono);
+  letter-spacing: 0.05em;
+  color: var(--faint);
+}
+footer.sticky-bottom .container {
+  --global-text-color: var(--faint);
+  text-align: left;
+}
+footer.sticky-bottom .container::before {
+  content: ""; /* a rule as wide as the text column, not the padded container */
+  display: block;
+  height: 1px;
+  margin-bottom: 1.1rem;
+  background: var(--line);
+}
+footer.sticky-bottom a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+}
+
+/* ── Spacing that al-folio sets with .mt-5 ─────────────────────────────
+   .mt-5 is !important inside tailwind.css's `components` layer. Unlayered rules cannot beat a
+   layered !important, but an !important rule in an earlier layer (`base`) can. */
+@layer base {
+  .container[role="main"]:has(> .sa-home) {
+    margin-top: 0 !important;
+  }
+  footer.sticky-bottom {
+    margin-top: 3.2rem !important;
+  }
+}
+
+/* ── Phones: one column; the margin's contents sit above their text ── */
+@media (max-width: 42rem) {
+  :root {
+    --gap: 0rem;
+  }
+  .container {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+  .sa-row,
+  .pub {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sa-intro {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1.8rem;
+  }
+  .sa-side,
+  .sa-main {
+    display: contents;
+  }
+  .sa-photo {
+    order: 1;
+    width: 7rem;
+    margin: 0 0 1.1rem;
+  }
+  .sa-id {
+    order: 2;
+  }
+  .sa-contacts {
+    order: 3;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.1rem;
+    margin-top: 0.8rem;
+  }
+  .sa-bio {
+    order: 4;
+    margin-top: 1.6rem;
+    padding-left: 0.95rem;
+  }
+  .sa-mark {
+    font-size: 2rem;
+  }
+  .sa-id h1 {
+    font-size: 2rem;
+  }
+  .sa-path {
+    display: block;
+    height: auto;
+  }
+  .sa-stop {
+    padding: 0 0 1.2rem 1.7rem;
+  }
+  .sa-node {
+    top: 0.42rem;
+    left: 0;
+    margin: 0;
+  }
+  .sa-stop.is-now .sa-node {
+    left: -1px;
+  }
+  .sa-stop::after {
+    top: 0.42rem;
+    left: calc(var(--node) / 2 - 1px);
+    width: 2px;
+    height: 100%;
+    margin: 0;
+    background: var(--accent-soft);
+    transform-origin: top center;
+  }
+  .sa-stop:last-child::after {
+    display: none;
+  }
+  .sa-route.will-draw .sa-stop::after {
+    transform: scaleY(0);
+  }
+  .sa-stop .sa-tag,
+  .sa-stop:nth-child(odd) .sa-tag,
+  .sa-stop:nth-child(even) .sa-tag {
+    position: static;
+    width: auto;
+    transform: none;
+    text-align: left;
+  }
+  .sa-tag span {
+    display: inline;
+  }
+  .sa-when {
+    display: block !important;
+  }
+  .sa-what::before {
+    content: " · ";
+    color: var(--faint);
+  }
+  .pub {
+    margin: 0 -0.75rem;
+    padding: 0.85rem 0.75rem;
+  }
+  .pub-rail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+  .pub-award {
+    margin-top: 0;
+  }
+  .pub-figure {
+    flex: 0 0 100%; /* its own line, under the venue */
+    margin-top: 0.55rem;
+  }
+  .pub-figure img {
+    max-width: 16rem;
+  }
+}

@@ -1,6 +1,11 @@
-"AJP":
-  url: https://aapt.scitation.org/journal/ajp
-  color: "#00369f"
+# Venue badges shown to the left of each paper (the bib entry's `abbr` must match a key here).
+"ICML":
+  url: https://icml.cc/Conferences/2026
+  color: "#8c1b26"
 
-"PhysRev":
-  url: https://journals.aps.org/
+"NeurIPS Workshop":
+  color: "#8c1b26"
+
+"IEEE Access":
+  url: https://ieeeaccess.ieee.org/
+  color: "#393939"

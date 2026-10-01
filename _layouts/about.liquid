@@ -1,0 +1,162 @@
+---
+layout: default
+---
+{%- comment -%}
+  Local override of al_folio_core's about layout. One grid on a white page: the left margin holds
+  the portrait with the contact links under it; the right column holds the name, role and bio.
+  Under them, Experience: a straight line with a stop for each place in _data/experience.yml.
+  Sections are switched on and off in _pages/about.md.
+  After a gem update, check for drift with: bundle exec al-folio upgrade overrides audit
+{%- endcomment -%}
+{%- assign s = site.data.socials -%}
+{%- assign full_name = site.first_name | append: ' ' | append: site.last_name -%}
+<div class="post sa-home">
+
+  <header class="sa-intro">
+    <div class="sa-side">
+      <figure class="sa-photo">
+        {%- if page.profile.image -%}
+          <img src="{{ page.profile.image | prepend: '/assets/img/' | relative_url }}" alt="Portrait of {{ full_name }}">
+        {%- else -%}
+          <span class="sa-mark" aria-hidden="true">{{ page.profile.monogram }}</span>
+        {%- endif -%}
+      </figure>
+      <ul class="sa-contacts">
+        {%- if s.email -%}
+          <li>
+            <a class="sa-mail" href="#" data-u="{{ s.email | split: '@' | first }}" data-d="{{ s.email | split: '@' | last }}">
+              {% include icon.liquid name="envelope" %}Email
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if s.scholar_userid -%}
+          <li>
+            <a href="https://scholar.google.com/citations?user={{ s.scholar_userid }}">{% include icon.liquid name="google-scholar" %}Google Scholar</a>
+          </li>
+        {%- endif -%}
+        {%- if s.github_username -%}
+          <li><a href="https://github.com/{{ s.github_username }}">{% include icon.liquid name="github" %}GitHub</a></li>
+        {%- endif -%}
+        {%- if s.linkedin_username -%}
+          <li><a href="https://www.linkedin.com/in/{{ s.linkedin_username }}">{% include icon.liquid name="linkedin" %}LinkedIn</a></li>
+        {%- endif -%}
+        {%- if s.orcid_id -%}
+          <li><a href="https://orcid.org/{{ s.orcid_id }}">{% include icon.liquid name="orcid" %}ORCID</a></li>
+        {%- endif -%}
+      </ul>
+    </div>
+    <div class="sa-main">
+      <div class="sa-id">
+        <h1>{{ full_name }}</h1>
+        <p class="sa-role">{{ page.role }}</p>
+        <p class="sa-affil">{{ page.affiliation }}</p>
+      </div>
+      <div class="sa-bio">
+        {{ content }}
+        {%- if page.seeking -%}
+          <p class="sa-seeking">{{ page.seeking }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+  </header>
+
+  {%- if page.experience and site.data.experience -%}
+    {%- comment -%}
+      One stop per column on a straight line in the soft red of the bio's bar. Past stops are red rings;
+      the current one is solid red with a halo, and the line fades out after it. Labels alternate above
+      and below. On first view the stops and segments appear in turn (script below).
+    {%- endcomment -%}
+    {%- assign stops = site.data.experience -%}
+    <section class="sa-path-section" aria-labelledby="experience">
+      <h2 class="sa-h" id="experience">Experience</h2>
+      <div class="sa-route">
+        <ol class="sa-path" style="--stops: {{ stops | size }}">
+          {%- for stop in stops -%}
+            <li class="sa-stop is-{{ stop.kind | default: 'past' }}" style="--i: {{ forloop.index0 }}">
+              <span class="sa-node" aria-hidden="true"></span>
+              <div class="sa-tag">
+                <span class="sa-when">{{ stop.when }}</span>
+                <span class="sa-where">{{ stop.where }}</span>
+                <span class="sa-what">{{ stop.what }}</span>
+              </div>
+            </li>
+          {%- endfor -%}
+        </ol>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- if page.research -%}
+    <section aria-labelledby="research">
+      <h2 class="sa-h" id="research">Research</h2>
+      <div class="publications">{% bibliography --group_by none --query @*[selected=true]* %}</div>
+    </section>
+  {%- endif -%}
+
+  {%- if page.earlier -%}
+    <section aria-labelledby="earlier">
+      <h2 class="sa-h" id="earlier">Earlier work</h2>
+      <div class="publications">{% bibliography --group_by none --query @*[section=earlier]* %}</div>
+    </section>
+  {%- endif -%}
+
+  {%- if page.announcements and page.announcements.enabled and site.news != blank -%}
+    {%- assign news_limit = page.announcements.limit | default: 100 -%}
+    <section aria-labelledby="news">
+      <h2 class="sa-h" id="news">News</h2>
+      <ul class="sa-list">
+        {%- assign news = site.news | reverse -%}
+        {%- for item in news limit: news_limit -%}
+          <li class="sa-row">
+            <time class="sa-label" datetime="{{ item.date | date: '%Y-%m' }}">{{ item.date | date: '%b %Y' }}</time>
+            <p>{{ item.content | remove: '<p>' | remove: '</p>' | strip }}</p>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </section>
+  {%- endif -%}
+
+  {%- if page.service and site.data.service -%}
+    <section aria-labelledby="service">
+      <h2 class="sa-h" id="service">Teaching and service</h2>
+      <ul class="sa-list">
+        {%- for row in site.data.service -%}
+          <li class="sa-row">
+            <span class="sa-label">{{ row.when }}</span>
+            <p>{{ row.what }}</p>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </section>
+  {%- endif -%}
+</div>
+<script>
+  document.querySelectorAll(".sa-mail").forEach(function (a) {
+    a.href = "mailto:" + a.dataset.u + "@" + a.dataset.d;
+  });
+
+  // Experience: the first time it scrolls into view, the stops and segments appear in turn, left to right.
+  // Skipped (the line simply shows) without IntersectionObserver, when the visitor prefers reduced motion,
+  // or when the page opens in a background tab.
+  // To switch the animation off, delete this block.
+  (function () {
+    var route = document.querySelector(".sa-route");
+    if (!route || !("IntersectionObserver" in window)) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (document.visibilityState !== "visible") return; // opened in a background tab: just show the line
+    route.classList.add("will-draw");
+    var seen = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            route.classList.add("is-drawn");
+            seen.disconnect();
+          }
+        });
+      },
+      { threshold: 0.35 }
+    );
+    seen.observe(route);
+  })();
+</script>
+{% include theme-switch.liquid %}
